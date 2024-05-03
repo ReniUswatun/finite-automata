@@ -1,137 +1,141 @@
 "use client";
 import Navbar from "@/components/navbar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { addToObjectDFA } from "@/lib/Soal5/search_dfa_5";
+import { addToObjectNFA } from "@/lib/Soal5/search_nfa_5";
+import { addToObjecteNFA } from "@/lib/Soal5/search_enfa_5";
 
 function Soal5Page() {
-  // function getInput(message) {
-  //   return prompt(message);
-  // }
+  const [valueItem, setValueItem] = useState("");
+  const [data, setData] = useState({
+    alphabet: "01",
+    initialState: "A",
+    finalState: "DE",
+    transition: `A|B,C\nB|B,D\nC|B,C\nD|B,E\nE|B,C`,
+  });
+  let object = {};
 
-  // function createTransitionTable(states, keys) {
-  //   const table = [];
-  //   for (let i = 0; i < states.length; i++) {
-  //     table[i] = [];
-  //     for (let j = 0; j < keys.length; j++) {
-  //       const nextState = getInput(
-  //         `From state ${states[i]} if ${keys[j]} goes to:`
-  //       );
-  //       table[i][j] = nextState.split();
-  //     }
-  //   }
-  //   return table;
-  // }
-
-  // function convert(currentStates, key, transitionTable) {
-  //   const possibleStates = [];
-  //   for (const state of currentStates) {
-  //     const stateIndex = states.indexOf(state);
-  //     const keyIndex = keys.indexOf(key);
-  //     possibleStates.push(...transitionTable[stateIndex][keyIndex]);
-  //   }
-  //   return possibleStates;
-  // }
-
-  // function isAccepted(string, finalState, transitionTable) {
-  //   let currentStates = [states[0]];
-  //   for (const char of string) {
-  //     currentStates = convert(currentStates, char, transitionTable);
-  //   }
-  //   return currentStates.some((state) => finalState.includes(state));
-  // }
-
-  // const states = [];
-  // const numStates = parseInt(getInput("Enter the number of states: "));
-  // for (let i = 0; i < numStates; i++) {
-  //   states.push(getInput(`Enter state ${i + 1}: `));
-  // }
-
-  // const keys = [];
-  // const numKeys = parseInt(getInput("Enter the number of keys: "));
-  // for (let i = 0; i < numKeys; i++) {
-  //   keys.push(getInput(`Enter key ${i + 1}: `));
-  // }
-
-  // const finalState = getInput("Enter the final state: ");
-
-  // const transitionTable = createTransitionTable(states, keys);
-
-  // while (true) {
-  //   const string = getInput("Enter a string to check: ");
-  //   const isStringAccepted = isAccepted(string, finalState, transitionTable);
-  //   console.log(isStringAccepted ? "Ya" : "Tidak");
-
-  //   const continueCheck = confirm("Check another string?");
-  //   if (!continueCheck) {
-  //     break;
-  //   }
-  // }
+  const onButtonGeneratedClick = () => {
+    console.log(valueItem);
+    if (valueItem === "DFA") {
+      object = addToObjectDFA(
+        data.transition,
+        data.alphabet,
+        data.initialState,
+        data.finalState
+      );
+      console.log(object);
+    } else if (valueItem === "NFA") {
+      object = addToObjectNFA(
+        data.transition,
+        data.alphabet,
+        data.initialState,
+        data.finalState
+      );
+      console.log(object);
+    } else if (valueItem === "e-NFA") {
+      object = addToObjecteNFA(
+        data.transition,
+        data.alphabet,
+        data.initialState,
+        data.finalState
+      );
+      console.log(object);
+    } else if (valueItem === "Regex") {
+    }
+  };
 
   return (
     <>
       <nav>
         <Navbar></Navbar>
       </nav>
-      <main className="flex flex-wrap flex-col justify-center mt-20 mx-10 ">
+      <main className="flex flex-wrap flex-col justify-center mt-20 mx-20 px-20 ">
         <div className="flex flex-row gap-4 mb-7">
-          <Button
-            className="
-            hover:bg-purple-100"
-            variant="secondary"
+          <Select
+            value={valueItem}
+            onValueChange={(value) => setValueItem(value)}
           >
-            Generate Random DFA
-          </Button>
-          <Button
-            className="
-            hover:bg-purple-100"
-            variant="secondary"
-          >
-            Generate Random NFA
-          </Button>
-          <Button
-            className="
-            hover:bg-purple-100"
-            variant="secondary"
-          >
-            Generate Random eNFA
-          </Button>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Jenis Graph" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="DFA">DFA</SelectItem>
+              <SelectItem value="NFA">NFA</SelectItem>
+              <SelectItem value="e-NFA">e-NFA</SelectItem>
+              <SelectItem value="Regex">Regex</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="many_state">States (gunakan spasi)</Label>
-          <Input id="many_state" placeholder="Banyak State" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
-          <Label htmlFor="alphabet">Alphabet (gunakan spasi)</Label>
-          <Input id="alphabet" placeholder="Simbol" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
-          <Label htmlFor="initial_state">Initial State (hanya 1)</Label>
-          <Input id="initial_state" placeholder="State Pertama" />
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
-          <Label htmlFor="final_state">Final State (gunakan spasi)</Label>
-          <Input id="final_state" placeholder="State yang diterima" />
-        </div>
+        <div>
+          <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
+            <Label htmlFor="alphabet">Alphabet (gunakan spasi)</Label>
+            <Input
+              id="alphabet"
+              placeholder="Simbol"
+              value={data.alphabet}
+              onChange={(e) => setData({ ...data, alphabet: e.target.value })}
+            />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
+            <Label htmlFor="initial_state">Initial State (hanya 1)</Label>
+            <Input
+              id="initial_state"
+              placeholder="State Pertama"
+              value={data.initialState}
+              onChange={(e) =>
+                setData({ ...data, initialState: e.target.value })
+              }
+            />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
+            <Label htmlFor="final_state">Final State (gunakan spasi)</Label>
+            <Input
+              id="final_state"
+              placeholder="State yang diterima"
+              value={data.finalState}
+              onChange={(e) => setData({ ...data, finalState: e.target.value })}
+            />
+          </div>
 
-        <div className="grid w-full max-w-md items-center gap-1.5 mt-7">
-          <Label htmlFor="trantition">
-            Transisi Table (format : stateA:symbol{`>`}stateB,stateC) <br></br>
-            <br></br>
-            Jika epsilon (gunakan $ karakter)
-          </Label>
-          <Textarea placeholder="Buat Transisi" id="trantition" />
-        </div>
-        <div className="grid w-full max-w-md mt-7">
-          <Button
-            className="bg-purple-500 text-white 
-            hover:bg-purple-800"
-            variant="secondary"
-          >
-            Make Graph
-          </Button>
+          <div className="grid w-full max-w-sm items-center gap-1.5 mt-7">
+            <Label htmlFor="trantition">
+              Transisi Table (format : stateA:symbol{`>`}stateB,stateC){" "}
+              <br></br>
+              <br></br>
+              Jika epsilon (gunakan $ karakter)
+            </Label>
+            <Textarea
+              placeholder="Buat Transisi"
+              id="trantition"
+              style={{ width: "100%", minWidth: "300px", minHeight: "200px" }}
+              value={data.transition}
+              onChange={(e) => setData({ ...data, transition: e.target.value })}
+            />
+          </div>
+          <div className="grid w-full max-w-md mt-7">
+            <div className="mb-7 mt-2">
+              <Button
+                className="hover:bg-purple-800
+            hover:text-white"
+                variant="secondary"
+                onClick={onButtonGeneratedClick}
+              >
+                Generate Random
+              </Button>
+            </div>
+          </div>
         </div>
       </main>
     </>

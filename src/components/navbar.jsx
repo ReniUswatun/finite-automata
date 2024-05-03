@@ -15,24 +15,9 @@ export default function Navbar() {
             <Link
               className="font-medium text-base border-b-2 border-transparent transition-colors hover:text-purple-900 
               hover:border-purple-700 dark:hover:text-gray-50 dark:hover:border-gray-800"
-              href="#"
+              href="/"
             >
               Home
-            </Link>
-            <Link
-              className="font-medium text-base border-b-2 border-transparent transition-colors hover:text-purple-900 
-              hover:border-purple-700  dark:hover:text-gray-50 dark:hover:border-gray-800"
-              href="#"
-            >
-              Penjelasan
-            </Link>
-
-            <Link
-              className="font-medium text-base border-b-2 border-transparent transition-colors hover:text-purple-900 
-              hover:border-purple-700 dark:hover:text-gray-50 dark:hover:border-gray-800"
-              href="#"
-            >
-              Kelompok
             </Link>
           </nav>
         </div>
